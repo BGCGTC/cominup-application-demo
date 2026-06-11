@@ -315,8 +315,8 @@ input:focus,select:focus,textarea:focus{outline:none; border-color:var(--blue-2)
     <section class="stepview" data-step="1">
       <div class="hero">
         <h1 class="step-t">Join Comin' Up</h1>
-        <p class="sub">A free membership for teens, ages 13–18. You can add more than one teen in the same application. Takes about 10 minutes on your phone.</p>
-        <div class="badges"><span class="badge free">FREE for teens 13–18</span><span class="badge">No account needed</span></div>
+        <p class="sub">A free membership for teens, ages 12–18. You can add more than one teen in the same application. Takes about 10 minutes on your phone.</p>
+        <div class="badges"><span class="badge free">FREE for teens 12–18</span><span class="badge">No account needed</span></div>
       </div>
       <div class="field" style="margin-top:18px"><label>Which Club is your family joining? <span class="req">*</span></label>
         <div class="loc-head">
@@ -701,7 +701,7 @@ function childEditorHTML(){
   '<div class="field"><label>Ethnicity <span class="req">*</span></label><select><option value="">Select…</option><option>Hispanic or Latino</option><option>Not Hispanic or Latino</option><option>Prefer not to say</option></select></div>'+
   '<label class="check"><input type="checkbox"><span>This teen is currently in foster care</span></label>'+
   '<p class="subblock-h">School</p>'+
-  '<div class="field"><label>Current grade <span class="req">*</span></label><select data-role="cgrade"><option value="">Select…</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option><option>Graduated</option></select></div>'+
+  '<div class="field"><label>Current grade <span class="req">*</span></label><select data-role="cgrade"><option value="">Select…</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option><option>Graduated</option></select></div>'+
   '<div class="field"><label>School name <span class="req">*</span></label><select onchange="toggleConditional(this,\'schoolOther\',\'Other / not listed\')"><option value="">Select…</option>'+schoolOptions()+'</select></div>'+
   '<div class="field conditional" id="schoolOther"><label>School name (if not listed) <span class="req">*</span></label><input type="text"></div>'+
   '<div class="field"><label>School ID number</label><input type="text" placeholder="If known"></div>'+
@@ -759,9 +759,9 @@ function saveChild(){
   const dobIn=ed.querySelector('[data-role=cdob]');
   if(dobIn && dobIn.value){
     const a=Math.floor((new Date()-new Date(dobIn.value))/3.15576e10);
-    if(a<13 || a>18){
+    if(a<12 || a>18){
       const fld=dobIn.closest('.field');
-      if(!errs.some(e=>e.f===fld)) errs.push({f:fld, msg:'Comin’ Up serves teens 13 to 18. This birth date makes the age '+a+'. Double-check the date, or ask your Club about programs for other ages.'});
+      if(!errs.some(e=>e.f===fld)) errs.push({f:fld, msg:'Comin’ Up serves teens 12 to 18. This birth date makes the age '+a+'. Double-check the date, or ask your Club about programs for other ages.'});
     }
   }
   // emergency contacts: at least 2, and none may be a guardian from earlier in the application
