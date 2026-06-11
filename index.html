@@ -264,7 +264,28 @@ input:focus,select:focus,textarea:focus{outline:none; border-color:var(--blue-2)
 .ans-grp .agh{font-family:var(--font-d); font-weight:800; font-size:13px; margin:0 0 8px; color:#333}
 .kv{display:grid; grid-template-columns:160px 1fr; gap:4px 14px; font-size:13px}
 .kv dt{color:var(--graphite)} .kv dd{margin:0; color:#222}
-.more{font-size:12px; color:var(--blue-2); font-weight:700; font-family:var(--font-d); margin-top:8px}
+.more{font-size:12px; color:var(--blue-2); font-weight:700; font-family:var(--font-d); margin-top:8px; cursor:pointer}
+.more:hover{text-decoration:underline}
+/* full-application modal */
+.fa-overlay{position:fixed; inset:0; background:rgba(10,22,34,.55); z-index:999; overflow-y:auto; padding:28px 14px 40px}
+.fa-sheet{background:#fff; border-radius:18px; max-width:780px; margin:0 auto; padding:24px 28px 30px; position:relative; box-shadow:0 18px 60px rgba(0,0,0,.3)}
+.fa-close{position:absolute; top:14px; right:14px; width:34px; height:34px; border-radius:50%; border:1.5px solid var(--mist); background:#fff; cursor:pointer; font-size:17px; line-height:1; color:var(--gray); font-family:var(--font-b)}
+.fa-close:hover{border-color:var(--blue-2); color:var(--blue)}
+.fa-head{border-bottom:2px solid var(--fog); padding-bottom:14px; margin-bottom:6px}
+.fa-head h2{font-family:var(--font-d); font-weight:800; font-size:20px; margin:0 0 4px; padding-right:40px}
+.fa-head .fm{color:var(--gray); font-size:12.5px}
+.fa-sec{border-bottom:1px solid var(--fog); padding:13px 0}
+.fa-sec:last-child{border-bottom:0}
+.fa-sec .agh{font-family:var(--font-d); font-weight:800; font-size:13px; margin:0 0 8px; color:#333}
+.fa-sec .agh .stepn{color:var(--gray); font-weight:700; font-size:11px; margin-left:6px}
+.fa-teen{background:var(--blue-tint); border-radius:10px; padding:9px 13px; margin:16px 0 4px; font-family:var(--font-d); font-weight:800; font-size:14px; color:var(--blue); display:flex; align-items:center; gap:8px}
+.fa-teen .tn2{margin-left:auto; font-size:11px; font-weight:700; color:var(--blue-2)}
+.fa-skip{font-size:12.5px; color:var(--gray); font-style:italic}
+.fa-flag{display:inline-block; font-family:var(--font-d); font-weight:700; font-size:10.5px; padding:2px 9px; border-radius:var(--r-pill); background:var(--green-tint); color:var(--green-d); margin-left:6px; font-style:normal}
+.fa-sig{border:1.5px solid var(--mist); border-radius:10px; padding:8px 14px 4px; margin-top:6px; max-width:280px; background:#fcfdfe}
+.fa-sig svg{display:block}
+.fa-sig .sl{border-top:1px solid #b9c4cf; font-size:10.5px; color:var(--gray); padding:4px 2px 4px; display:flex; justify-content:space-between}
+.fa-foot{display:flex; gap:10px; justify-content:flex-end; margin-top:18px; padding-top:14px; border-top:1px solid var(--fog)}
 .success{background:linear-gradient(180deg,#f3fbe7,#fff); border:1.5px solid #cfe89a; border-radius:16px; padding:22px; text-align:center; margin-top:16px}
 .success .sok{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
 .success h3{font-family:var(--font-d); font-weight:800; font-size:19px; margin:0 0 6px}
@@ -845,9 +866,98 @@ const APPS=[
 
  { id:'A-2049', site:'Panther', guardian:'Ana Ramirez (Mother)', phone:'(817) 555-6604', email:'anaramirez.tx@example.com', addr:'3905 Wilbarger St, Fort Worth, TX 76119', submitted:'6 hours ago', status:'review',
    children:[{n:'Destiny Ramirez',d:'16, Grade 11'}],
-   answers:[['Household',{'Lives with':'Both parents','Income':'$25,000–$29,999','Assistance':'WIC','Language':'Spanish'}],['Destiny · health',{'Conditions':'None','Allergies':'Penicillin'}],['Destiny · emergency',{'Contact 1':'Luis Ramirez (Father) · (817) 555-6620'}]],
+   answers:[['Household',{'Lives with':'Both parents','Income':'$25,000–$29,999','Assistance':'WIC','Language':'Spanish'}],['Guardians',{'Secondary':'Luis Ramirez (Father) · (817) 555-6620'}],['Destiny · health',{'Conditions':'None','Allergies':'Penicillin'}],['Destiny · emergency',{'Contact 1':'Gloria Vasquez (Grandmother) · (817) 555-7741'}]],
    candidates:[], recommend:'create' }
 ];
+/* full submitted application per demo persona — every wizard field, in the order the parent saw it */
+const FULL={
+ 'A-2041':{
+  guardian:{'First name':'Maria','Last name':'Gonzalez','Relationship to the teen(s)':'Mother','Mobile phone':'(817) 555-0148','Email':'maria.gonzalez@example.com','Street address':'2418 Ellis Ave','City':'Fort Worth','State':'TX','ZIP code':'76164'},
+  household:{'Who do the members live with?':'Mother only','Adults in home (19+)':'1','Youth in home (0–18)':'3','Household income range':'$15,000–$19,999','Other income sources':'Child support','Assistance programs':'SNAP / Food Stamps · Medicaid / CHIP','Housing type':'Own / Rent','Primary language at home':'Spanish'},
+  secondary:null, other:null,
+  military:{'Is a parent or guardian in the military?':'No'},
+  teens:[
+   {n:'Carlos Gonzalez', day:true, sections:[
+    ['Member details',{'First name':'Carlos','Last name':'Gonzalez','Date of birth':'03/14/2012 (age 14)','Gender':'Male','T-shirt size':'AM','Race':'Other','Ethnicity':'Hispanic or Latino','Currently in foster care':'No'}],
+    ['School',{'Current grade':'Grade 9','School name':'North Side High School','School ID number':'—','School lunch status':'Free lunch'}],
+    ['Health & medical',{'No conditions to report':'No (conditions listed)','Diagnosed conditions':'Asthma','EpiPen / inhaler / insulin':'Yes','Physician name':'Dr. Elena Soto','Physician phone':'(817) 555-0190','Current medications':'Albuterol inhaler, as needed'}],
+    ['Allergies',{'No known allergies':'No (allergies listed)','Allergies':'Peanuts','Other allergies':'—'}],
+    ['How can we help this teen?',{'Selected':'Staying in school · Mentoring'}],
+    ['Club programs',{'Comin’ Up · evenings':'This application','Daytime After School Program':'Yes, interested'}],
+    ['Emergency contact 1',{'Name':'Rosa Mendez','Relationship':'Grandmother','Mobile phone':'(817) 555-0177','Authorized to pick up':'Yes','Can reach the Club within 1 hour':'Yes'}],
+    ['Emergency contact 2',{'Name':'Carmen Diaz','Relationship':'Aunt','Mobile phone':'(817) 555-0182','Authorized to pick up':'No','Can reach the Club within 1 hour':'Yes'}]]},
+   {n:'Mateo Gonzalez', sections:[
+    ['Member details',{'First name':'Mateo','Last name':'Gonzalez','Date of birth':'06/02/2013 (age 13)','Gender':'Male','T-shirt size':'YL','Race':'Other','Ethnicity':'Hispanic or Latino','Currently in foster care':'No'}],
+    ['School',{'Current grade':'Grade 8','School name':'J.P. Elder Middle School','School ID number':'—','School lunch status':'Free lunch'}],
+    ['Health & medical',{'No conditions to report':'Yes'}],
+    ['Allergies',{'No known allergies':'Yes'}],
+    ['How can we help this teen?',{'Selected':'Mentoring'}],
+    ['Club programs',{'Comin’ Up · evenings':'This application','Daytime After School Program':'Not right now'}],
+    ['Emergency contact 1',{'Name':'Rosa Mendez (reused)','Relationship':'Grandmother','Mobile phone':'(817) 555-0177','Authorized to pick up':'Yes','Can reach the Club within 1 hour':'Yes'}],
+    ['Emergency contact 2',{'Name':'Carmen Diaz (reused)','Relationship':'Aunt','Mobile phone':'(817) 555-0182','Authorized to pick up':'No','Can reach the Club within 1 hour':'Yes'}]]}],
+  sigs:{handbook:'Maria Gonzalez', orientation:'Maria Gonzalez', signed:'Maria Gonzalez', when:'submitted 2 days ago · 6:41 PM'}},
+ 'A-2046':{
+  guardian:{'First name':'Tasha','Last name':'Brooks','Relationship to the teen(s)':'Legal Guardian (Aunt)','Mobile phone':'(682) 555-2277','Email':'tasha.brooks88@example.com','Street address':'5120 Ramey Ave','City':'Fort Worth','State':'TX','ZIP code':'76105'},
+  household:{'Who do the members live with?':'Other relative (aunt)','Adults in home (19+)':'2','Youth in home (0–18)':'2','Household income range':'Prefer not to say','Other income sources':'—','Assistance programs':'None','Housing type':'Own / Rent','Primary language at home':'English'},
+  secondary:null, other:null,
+  military:{'Is a parent or guardian in the military?':'No'},
+  teens:[
+   {n:'Jayden Brooks', sections:[
+    ['Member details',{'First name':'Jayden','Last name':'Brooks','Date of birth':'11/08/2010 (age 15)','Gender':'Male','T-shirt size':'AL','Race':'Black or African American','Ethnicity':'Not Hispanic or Latino','Currently in foster care':'No'}],
+    ['School',{'Current grade':'Grade 10','School name':'Eastern Hills High School','School ID number':'4471208','School lunch status':'Not sure'}],
+    ['Health & medical',{'No conditions to report':'Yes'}],
+    ['Allergies',{'No known allergies':'Yes'}],
+    ['How can we help this teen?',{'Selected':'Job / career readiness'}],
+    ['Club programs',{'Comin’ Up · evenings':'This application','Daytime After School Program':'Not right now'}],
+    ['Emergency contact 1',{'Name':'Denise Brooks','Relationship':'Grandmother','Mobile phone':'(682) 555-7781','Authorized to pick up':'Yes','Can reach the Club within 1 hour':'Yes'}],
+    ['Emergency contact 2',{'Name':'Marcus Hill','Relationship':'Friend','Mobile phone':'(682) 555-3310','Authorized to pick up':'No','Can reach the Club within 1 hour':'No'}]]}],
+  sigs:{handbook:'Tasha Brooks', orientation:'Tasha Brooks', signed:'Tasha Brooks', when:'submitted 1 day ago · 8:12 PM'}},
+ 'A-2049':{
+  guardian:{'First name':'Ana','Last name':'Ramirez','Relationship to the teen(s)':'Mother','Mobile phone':'(817) 555-6604','Email':'anaramirez.tx@example.com','Street address':'3905 Wilbarger St','City':'Fort Worth','State':'TX','ZIP code':'76119'},
+  household:{'Who do the members live with?':'Both parents','Adults in home (19+)':'2','Youth in home (0–18)':'1','Household income range':'$25,000–$29,999','Other income sources':'—','Assistance programs':'WIC','Housing type':'Own / Rent','Primary language at home':'Spanish'},
+  secondary:{'Lives at the same address':'Yes','First name':'Luis','Last name':'Ramirez','Relationship to the teen(s)':'Father','Mobile phone':'(817) 555-6620','Alternate phone':'—','Email':'—','Authorized to pick up':'Yes'},
+  other:null,
+  military:{'Is a parent or guardian in the military?':'No'},
+  teens:[
+   {n:'Destiny Ramirez', sections:[
+    ['Member details',{'First name':'Destiny','Last name':'Ramirez','Date of birth':'09/21/2009 (age 16)','Gender':'Female','T-shirt size':'AS','Race':'Other','Ethnicity':'Hispanic or Latino','Currently in foster care':'No'}],
+    ['School',{'Current grade':'Grade 11','School name':'Polytechnic Senior High School','School ID number':'—','School lunch status':'Reduced-price lunch'}],
+    ['Health & medical',{'No conditions to report':'Yes'}],
+    ['Allergies',{'No known allergies':'No (allergies listed)','Allergies':'Penicillin','Other allergies':'—'}],
+    ['How can we help this teen?',{'Selected':'Mental health · Family support'}],
+    ['Club programs',{'Comin’ Up · evenings':'This application','Daytime After School Program':'Not right now'}],
+    ['Emergency contact 1',{'Name':'Gloria Vasquez','Relationship':'Grandmother','Mobile phone':'(817) 555-7741','Authorized to pick up':'Yes','Can reach the Club within 1 hour':'Yes'}],
+    ['Emergency contact 2',{'Name':'Pedro Ramirez','Relationship':'Uncle','Mobile phone':'(817) 555-7768','Authorized to pick up':'No','Can reach the Club within 1 hour':'Yes'}]]}],
+  sigs:{handbook:'Ana Ramirez', orientation:'Ana Ramirez', signed:'Ana Ramirez', when:'submitted 6 hours ago · 9:03 AM'}}
+};
+function faKV(o){ return '<dl class="kv">'+Object.entries(o).map(kv=>'<dt>'+kv[0]+'</dt><dd>'+kv[1]+'</dd>').join('')+'</dl>'; }
+function faSec(title, body, step){ return '<div class="fa-sec"><p class="agh">'+title+(step?'<span class="stepn">'+step+'</span>':'')+'</p>'+body+'</div>'; }
+function openFullApp(){
+  const a=selApp; if(!a) return; const f=FULL[a.id]; if(!f) return;
+  const sigSvg='<svg width="180" height="34" viewBox="0 0 180 34" fill="none"><path d="M6 26 C 16 6, 24 4, 27 14 C 30 24, 22 30, 33 24 C 46 17, 50 8, 57 13 C 63 17, 60 26, 70 22 C 82 17, 88 9, 97 14 C 104 18, 102 25, 112 21 C 124 16, 132 12, 142 16 C 152 20, 160 18, 173 13" stroke="#1c3aa9" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  let h='<div class="fa-head"><h2>Full application · '+a.guardian.split(' (')[0]+'</h2><div class="fm">'+a.id+' · '+a.site+' · '+f.teens.length+' teen'+(f.teens.length>1?'s':'')+' · '+f.sigs.when+'</div><div class="fm" style="margin-top:3px">Read-only: every answer exactly as the parent submitted it, in the order the parent saw it. Nothing here is in MyClubHub yet.</div></div>';
+  h+=faSec('Club','<dl class="kv"><dt>Club site</dt><dd>'+a.site+'</dd><dt>Membership</dt><dd>Comin’ Up Annual (Free)</dd></dl>','Step 1');
+  h+=faSec('Primary parent / guardian', faKV(f.guardian),'Step 2');
+  h+=faSec('Household', faKV(f.household),'Step 3');
+  h+=faSec('Secondary guardian', f.secondary?faKV(f.secondary):'<p class="fa-skip">Skipped by the parent (optional step).</p>','Step 4');
+  h+=faSec('Other guardian (lives elsewhere)', f.other?faKV(f.other):'<p class="fa-skip">Skipped by the parent (optional step).</p>','Step 5');
+  h+=faSec('Military family', f.military?faKV(f.military):'<p class="fa-skip">Skipped by the parent (optional step).</p>','Step 6');
+  f.teens.forEach((t,i)=>{
+    h+='<div class="fa-teen">'+I.users+' '+t.n+(t.day?'<span class="fa-flag">+ daytime After School</span>':'')+'<span class="tn2">Teen '+(i+1)+' of '+f.teens.length+'</span></div>';
+    t.sections.forEach(s=>{ h+=faSec(s[0], faKV(s[1])); });
+  });
+  h+=faSec('Acknowledgements & signatures',
+    '<dl class="kv"><dt>Parent Handbook</dt><dd>Signed (typed): '+f.sigs.handbook+'</dd><dt>Parent Orientation</dt><dd>Signed (typed): '+f.sigs.orientation+'</dd><dt>Authorization &amp; Assumption of the Risk</dt><dd>Signed by hand:</dd></dl>'+
+    '<div class="fa-sig">'+sigSvg+'<div class="sl"><span>'+f.sigs.signed+'</span><span>'+f.sigs.when.replace('submitted ','')+'</span></div></div>','Step 8');
+  h+='<div class="fa-foot"><button class="btn btn-ghost" onclick="closeFullApp()">Close</button></div>';
+  const ov=document.createElement('div'); ov.className='fa-overlay'; ov.id='faOverlay';
+  ov.innerHTML='<div class="fa-sheet"><button class="fa-close" onclick="closeFullApp()" aria-label="Close">✕</button>'+h+'</div>';
+  ov.addEventListener('click',e=>{ if(e.target===ov) closeFullApp(); });
+  document.body.appendChild(ov); document.body.style.overflow='hidden';
+}
+function closeFullApp(){ const ov=$('faOverlay'); if(ov) ov.remove(); document.body.style.overflow=''; }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeFullApp(); });
+
 let selApp=null, selCand=null, approvedIds={};
 function renderQueue(){
   const open=APPS.filter(a=>!approvedIds[a.id]).length;
@@ -871,7 +981,7 @@ function renderDetail(){
   const kidsStrip='<div class="kids-strip">'+a.children.map(k=>'<span class="ks">'+I.users+' '+k.n+' <small>'+k.d+'</small></span>').join('')+'</div>';
   d.innerHTML='<div class="dhead"><div><div class="dn">'+a.guardian.split(' (')[0]+'’s application</div><div class="dmeta">'+a.children.length+' teen'+(a.children.length>1?'s':'')+' · '+a.site+' · Comin’ Up Annual (Free)</div><div class="dmeta">'+a.guardian+' · '+a.phone+' · '+a.email+'</div><div class="dmeta">'+a.addr+' · submitted '+a.submitted+'</div>'+kidsStrip+'</div><span class="noacct">'+I.info_b.replace(/#0a3a5c/g,'#9a6207')+' No account yet</span></div>'+
    '<div class="panel match-panel"><p class="ph">'+I.users+' Find or create the family</p><p class="psub">Matched on email, phone, address, and names. Nothing is written until you choose. Linking or creating will add '+a.children.length+' member'+(a.children.length>1?'s':'')+'.</p>'+rec+cands+'<div class="orline">or</div><button class="btn btn-create" onclick="createNew()">'+I.plus+' Create a new account &amp; contacts</button></div>'+
-   '<div class="panel"><p class="ph">Submitted application</p><p class="psub">Shared family answers plus each teen’s details (summary of all 112 fields).</p>'+a.answers.map(g=>'<div class="ans-grp"><p class="agh">'+g[0]+'</p><dl class="kv">'+Object.entries(g[1]).map(kv=>'<dt>'+kv[0]+'</dt><dd>'+kv[1]+'</dd>').join('')+'</dl></div>').join('')+'<p class="more">View full application (all fields) →</p></div>';
+   '<div class="panel"><p class="ph">Submitted application</p><p class="psub">Shared family answers plus each teen’s details (summary of all 112 fields).</p>'+a.answers.map(g=>'<div class="ans-grp"><p class="agh">'+g[0]+'</p><dl class="kv">'+Object.entries(g[1]).map(kv=>'<dt>'+kv[0]+'</dt><dd>'+kv[1]+'</dd>').join('')+'</dl></div>').join('')+'<p class="more" onclick="openFullApp()">View full application (all fields) →</p></div>';
 }
 function pickCand(i){ selCand=i; renderDetail(); }
 function linkFamily(i){ approvedIds[selApp.id]={type:'link',cand:selApp.candidates[i]}; renderQueue(); renderDetail(); }
