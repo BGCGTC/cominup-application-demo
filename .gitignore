@@ -1,0 +1,8 @@
+*
+!.gitignore
+!README.md
+!index.html
+!assets/
+assets/*
+!assets/bgcgtc-logo-color.png
+!assets/bgcgtc-logo-white.png
