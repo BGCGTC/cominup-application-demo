@@ -115,6 +115,16 @@ input:focus,select:focus,textarea:focus{outline:none; border-color:var(--blue-2)
 .addbtn[disabled]{opacity:.4; cursor:not-allowed}
 .hero{text-align:center; padding:8px 4px 0}
 .cu-word{display:inline-block; font-family:var(--font-d); font-weight:800; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#fff; background:var(--green); padding:7px 16px; border-radius:var(--r-pill); margin:4px 0 14px}
+.prog-compare{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px}
+@media(max-width:560px){.prog-compare{grid-template-columns:1fr}}
+.prog-card{border:1.5px solid var(--mist); border-radius:var(--r-md); padding:13px 14px; background:#fff}
+.prog-card.cu{border-color:var(--blue-2); background:var(--blue-tint)}
+.prog-card .pc-tag{display:inline-block; font-family:var(--font-d); font-weight:800; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; padding:3px 9px; border-radius:var(--r-pill); margin-bottom:7px}
+.prog-card.cu .pc-tag{background:var(--blue); color:#fff}
+.prog-card.day .pc-tag{background:var(--green-tint); color:var(--green-d); border:1px solid #d6e6a6}
+.prog-card b{font-family:var(--font-d); font-size:14px; display:block; margin-bottom:3px}
+.prog-card p{margin:0; font-size:12.5px; color:var(--graphite); line-height:1.45}
+.prog-card .pc-when{display:block; font-size:12px; color:var(--gray); margin-top:6px; font-weight:600}
 .badges{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:16px 0 6px}
 .badge{display:inline-flex; align-items:center; gap:7px; background:var(--green-tint); color:#3d5400; border:1px solid #d6e6a6; border-radius:var(--r-pill); padding:8px 14px; font-family:var(--font-d); font-weight:700; font-size:12.5px}
 .badge.free{background:var(--green); color:#fff; border-color:var(--green)}
@@ -717,6 +727,13 @@ function childEditorHTML(){
   '<div class="allergyBody"><div class="chips"><span class="chip" onclick="tog(this)">Peanuts</span><span class="chip" onclick="tog(this)">Tree nuts</span><span class="chip" onclick="tog(this)">Dairy</span><span class="chip" onclick="tog(this)">Shellfish</span><span class="chip" onclick="tog(this)">Penicillin</span><span class="chip" onclick="tog(this)">Bees / Insects</span><span class="chip" onclick="chipOther(this,\'allergyOther\')">Other</span></div><div class="field conditional allergyOther" style="margin:14px 0 0"><label>Other allergies</label><input type="text"></div></div>'+
   '<p class="subblock-h">How can we help this teen?</p>'+
   '<div class="chips"><span class="chip" onclick="tog(this)">Staying in school</span><span class="chip" onclick="tog(this)">Job / career readiness</span><span class="chip" onclick="tog(this)">Leaving a gang</span><span class="chip" onclick="tog(this)">Mental health</span><span class="chip" onclick="tog(this)">Mentoring</span><span class="chip" onclick="tog(this)">Family support</span></div>'+
+  '<p class="subblock-h">Club programs</p>'+
+  '<div class="prog-compare">'+
+    '<div class="prog-card cu"><span class="pc-tag">This application</span><b>Comin’ Up · Evenings</b><p>The evening teen program: activities, mentoring, and support built around what each teen needs. Free for ages 12 to 18.</p><span class="pc-when">Mon to Fri · 7:00 to 11:00 PM · Comin’ Up sites</span></div>'+
+    '<div class="prog-card day"><span class="pc-tag">Also available</span><b>After School Program · Daytime</b><p>The classic Club afternoon: homework help and academic support, arts, sports and fitness, and leadership activities.</p><span class="pc-when">Mon to Fri · 3:00 to 6:30 PM · Club branches</span></div>'+
+  '</div>'+
+  '<div class="field" data-role="cdaytime"><label>Would you also like this teen to attend the daytime After School Program?</label><div class="seg"><button type="button" onclick="seg(this)">Not right now</button><button type="button" onclick="seg(this)">Yes, interested</button></div></div>'+
+  '<div class="shared-note">'+I.info+' <span><b>One application covers both.</b> If you say yes, this teen is set up with both memberships when your application is approved: Comin’ Up for evenings and the After School Program for daytime. A staff member will confirm the details with you.</span></div>'+
   '<p class="subblock-h">Emergency contacts <span class="hint" style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--graphite)">(at least 2 · can differ per teen)</span></p>'+
   '<div class="shared-note">'+I.info+' <span><b>These must be different people</b> from the parents and guardians you listed earlier. Emergency contacts are extra people we can call when we can\'t reach the others, especially the primary and secondary contacts.</span></div>'+
   '<div class="ecKidList"></div>'+
@@ -786,9 +803,11 @@ function saveChild(){
   syncValues(ed);
   const f=(ed.querySelector('[data-role=cfirst]')||{}).value||''; const l=(ed.querySelector('[data-role=clast]')||{}).value||'';
   const g=(ed.querySelector('[data-role=cgrade]')||{}).value||''; const dob=(ed.querySelector('[data-role=cdob]')||{}).value||'';
+  const dayBtn=ed.querySelector('[data-role=cdaytime] .seg button.on');
+  const daytime=!!(dayBtn && dayBtn.textContent.indexOf('Yes')===0);
   const name=(f+' '+l).trim()||('Teen '+(children.length+1));
   let age=''; if(dob){ const y=new Date(dob); if(!isNaN(y)){ const now=new Date(); age=Math.floor((now-y)/3.15576e10); } }
-  const rec={ name:name, first:f, grade:g, age:age, html:ed.innerHTML };
+  const rec={ name:name, first:f, grade:g, age:age, daytime:daytime, html:ed.innerHTML };
   if(editingIdx===null) children.push(rec); else children[editingIdx]=rec;
   // contribute this teen's NEW emergency contacts to the reuse pool
   ed.querySelectorAll('.ecKid').forEach(card=>{ const sel=card.querySelector('.ecReuse'); if(!sel||sel.value==='new'){ const ins=card.querySelectorAll('.ecManual input'); const nm=((ins[0]&&ins[0].value)||'').trim()+' '+((ins[1]&&ins[1].value)||'').trim(); if(nm.trim()&&extraPeople.indexOf(nm.trim()+' (emergency contact)')<0) extraPeople.push(nm.trim()+' (emergency contact)'); } });
@@ -799,21 +818,21 @@ function renderKids(){
   const wrap=$('kidList');
   if(children.length===0){ wrap.innerHTML='<div class="kid-empty"><b>No teens added yet</b>Add each teen who will attend Comin’ Up. You can add as many as you need.</div>'; return; }
   wrap.innerHTML=children.map((c,i)=>'<div class="kid-card"><div class="av">'+(c.first?c.first[0].toUpperCase():'T')+'</div>'+
-    '<div class="kinfo"><div class="kn">'+c.name+'</div><div class="km">'+[c.age!==''?c.age+' yrs':'',c.grade].filter(Boolean).join(' · ')+(c.grade||c.age!==''?' · ':'')+'Comin’ Up Annual (Free)</div></div>'+
+    '<div class="kinfo"><div class="kn">'+c.name+'</div><div class="km">'+[c.age!==''?c.age+' yrs':'',c.grade].filter(Boolean).join(' · ')+(c.grade||c.age!==''?' · ':'')+'Comin’ Up Annual (Free)'+(c.daytime?' + After School (Daytime)':'')+'</div></div>'+
     '<div class="kact"><button class="kbtn" onclick="openEditChild('+i+')">Edit</button><button class="kbtn del" onclick="removeChild('+i+')">Remove</button></div></div>').join('');
 }
 function renderReviewKids(){
   const wrap=$('reviewKids');
   if(children.length===0){ wrap.innerHTML='<div class="done2" style="color:var(--magenta)">No teens added. Go back and add at least one.</div>'; return; }
   wrap.innerHTML='<div class="done2">'+I.check_sm+' '+children.length+' teen'+(children.length>1?'s':'')+' added</div>'+
-    children.map(c=>'<div style="font-size:13.5px;padding:4px 0;color:#333">• <b>'+c.name+'</b> '+(c.grade?'· '+c.grade:'')+'</div>').join('');
+    children.map(c=>'<div style="font-size:13.5px;padding:4px 0;color:#333">• <b>'+c.name+'</b> '+(c.grade?'· '+c.grade:'')+(c.daytime?' <span style="color:var(--green-d);font-weight:700">· Comin’ Up + daytime After School</span>':'')+'</div>').join('');
 }
 
 /* ================= STAFF ================= */
 const APPS=[
  { id:'A-2041', site:'North Fort Worth', guardian:'Maria Gonzalez (Mother)', phone:'(817) 555-0148', email:'maria.gonzalez@example.com', addr:'2418 Ellis Ave, Fort Worth, TX 76164', submitted:'2 days ago', status:'review',
-   children:[{n:'Carlos Gonzalez',d:'14, Grade 9'},{n:'Mateo Gonzalez',d:'13, Grade 8'}],
-   answers:[['Household',{'Lives with':'Mother only','Income':'$15,000–$19,999','Assistance':'SNAP, Medicaid','Language':'Spanish'}],['Carlos · health',{'Conditions':'Asthma','Inhaler':'Yes','Allergies':'Peanuts'}],['Carlos · emergency',{'Contact 1':'Rosa Mendez (Grandmother)','Pickup':'Yes'}],['Mateo · health',{'Conditions':'None','Allergies':'None'}]],
+   children:[{n:'Carlos Gonzalez',d:'14, Grade 9',day:true},{n:'Mateo Gonzalez',d:'13, Grade 8'}],
+   answers:[['Household',{'Lives with':'Mother only','Income':'$15,000–$19,999','Assistance':'SNAP, Medicaid','Language':'Spanish'}],['Programs',{'Carlos':'Comin’ Up + daytime After School','Mateo':'Comin’ Up only'}],['Carlos · health',{'Conditions':'Asthma','Inhaler':'Yes','Allergies':'Peanuts'}],['Carlos · emergency',{'Contact 1':'Rosa Mendez (Grandmother)','Pickup':'Yes'}],['Mateo · health',{'Conditions':'None','Allergies':'None'}]],
    candidates:[{name:'Gonzalez Household', members:'Maria Gonzalez (parent) · <b>Sofia Gonzalez (member, 16)</b> · active at North Fort Worth', conf:96, level:'High', reasons:[['Phone','exact'],['Email','exact'],['Address','exact'],['Last name','exact']]},
                {name:'Gonzales, Maria (M.)', members:'Maria M. Gonzales (parent) · East Side, lapsed 2023', conf:38, level:'Low', reasons:[['Phone','none'],['Email','none'],['Address','none'],['Last name','partial']]}], recommend:'link' },
 
@@ -851,7 +870,7 @@ function renderDetail(){
   const kidsStrip='<div class="kids-strip">'+a.children.map(k=>'<span class="ks">'+I.users+' '+k.n+' <small>'+k.d+'</small></span>').join('')+'</div>';
   d.innerHTML='<div class="dhead"><div><div class="dn">'+a.guardian.split(' (')[0]+'’s application</div><div class="dmeta">'+a.children.length+' teen'+(a.children.length>1?'s':'')+' · '+a.site+' · Comin’ Up Annual (Free)</div><div class="dmeta">'+a.guardian+' · '+a.phone+' · '+a.email+'</div><div class="dmeta">'+a.addr+' · submitted '+a.submitted+'</div>'+kidsStrip+'</div><span class="noacct">'+I.info_b.replace(/#0a3a5c/g,'#9a6207')+' No account yet</span></div>'+
    '<div class="panel match-panel"><p class="ph">'+I.users+' Find or create the family</p><p class="psub">Matched on email, phone, address, and names. Nothing is written until you choose. Linking or creating will add '+a.children.length+' member'+(a.children.length>1?'s':'')+'.</p>'+rec+cands+'<div class="orline">or</div><button class="btn btn-create" onclick="createNew()">'+I.plus+' Create a new account &amp; contacts</button></div>'+
-   '<div class="panel"><p class="ph">Submitted application</p><p class="psub">Shared family answers plus each teen’s details (summary of all 111 fields).</p>'+a.answers.map(g=>'<div class="ans-grp"><p class="agh">'+g[0]+'</p><dl class="kv">'+Object.entries(g[1]).map(kv=>'<dt>'+kv[0]+'</dt><dd>'+kv[1]+'</dd>').join('')+'</dl></div>').join('')+'<p class="more">View full application (all fields) →</p></div>';
+   '<div class="panel"><p class="ph">Submitted application</p><p class="psub">Shared family answers plus each teen’s details (summary of all 112 fields).</p>'+a.answers.map(g=>'<div class="ans-grp"><p class="agh">'+g[0]+'</p><dl class="kv">'+Object.entries(g[1]).map(kv=>'<dt>'+kv[0]+'</dt><dd>'+kv[1]+'</dd>').join('')+'</dl></div>').join('')+'<p class="more">View full application (all fields) →</p></div>';
 }
 function pickCand(i){ selCand=i; renderDetail(); }
 function linkFamily(i){ approvedIds[selApp.id]={type:'link',cand:selApp.candidates[i]}; renderQueue(); renderDetail(); }
@@ -860,9 +879,11 @@ function reopen(id){ delete approvedIds[id]; selCand=null; renderQueue(); render
 function successMarkup(a,res){
   const linked=res.type==='link';
   const kidContacts=a.children.map(k=>k.n).join(', ');
+  const dayN=a.children.filter(k=>k.day).length;
+  const membRow='Activated '+a.children.length+' · Comin’ Up Annual · '+a.site+(dayN?' <b>+ '+dayN+' After School (daytime)</b>':'');
   const rows = linked
-    ? [['Linked','Existing household: <b>'+res.cand.name+'</b>'],['Contacts','Created '+a.children.length+' member contact'+(a.children.length>1?'s':'')+': <b>'+kidContacts+'</b>'],['Memberships','Activated '+a.children.length+' · Comin’ Up Annual · '+a.site],['Data','111 answers written to Contacts, Account &amp; Memberships']]
-    : [['Account','Created new household: <b>'+a.guardian.split(' ').slice(-1)[0].replace(/[()]/g,'')+' Household</b>'],['Contacts','Created guardian <b>'+a.guardian.split(' (')[0]+'</b> + '+a.children.length+' member'+(a.children.length>1?'s':'')+': <b>'+kidContacts+'</b>'],['Memberships','Activated '+a.children.length+' · Comin’ Up Annual · '+a.site],['Data','111 answers written to Contacts, Account &amp; Memberships']];
+    ? [['Linked','Existing household: <b>'+res.cand.name+'</b>'],['Contacts','Created '+a.children.length+' member contact'+(a.children.length>1?'s':'')+': <b>'+kidContacts+'</b>'],['Memberships',membRow],['Data','112 answers written to Contacts, Account &amp; Memberships']]
+    : [['Account','Created new household: <b>'+a.guardian.split(' ').slice(-1)[0].replace(/[()]/g,'')+' Household</b>'],['Contacts','Created guardian <b>'+a.guardian.split(' (')[0]+'</b> + '+a.children.length+' member'+(a.children.length>1?'s':'')+': <b>'+kidContacts+'</b>'],['Memberships',membRow],['Data','112 answers written to Contacts, Account &amp; Memberships']];
   return '<div class="success"><div class="sok">'+I.check_lg+'</div><h3>'+(linked?'Linked &amp; approved':'New family created &amp; approved')+'</h3><p>'+(linked?'These teens were added to an existing family, so the household stays together on one account.':'A brand-new household, guardian, and member records were created from the application.')+'</p><div class="created">'+rows.map(r=>'<div class="cr"><span class="tagk">'+r[0]+'</span><span>'+r[1]+'</span></div>').join('')+'</div><div class="daction" style="justify-content:center"><button class="btn btn-ghost" onclick="reopen(\''+a.id+'\')">Undo</button></div></div>';
 }
 
