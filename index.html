@@ -125,6 +125,7 @@ input:focus,select:focus,textarea:focus{outline:none; border-color:var(--blue-2)
 .prog-card b{font-family:var(--font-d); font-size:14px; display:block; margin-bottom:3px}
 .prog-card p{margin:0; font-size:12.5px; color:var(--graphite); line-height:1.45}
 .prog-card .pc-when{display:block; font-size:12px; color:var(--gray); margin-top:6px; font-weight:600}
+.prog-card .pc-when+.pc-when{margin-top:2px}
 .badges{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:16px 0 6px}
 .badge{display:inline-flex; align-items:center; gap:7px; background:var(--green-tint); color:#3d5400; border:1px solid #d6e6a6; border-radius:var(--r-pill); padding:8px 14px; font-family:var(--font-d); font-weight:700; font-size:12.5px}
 .badge.free{background:var(--green); color:#fff; border-color:var(--green)}
@@ -730,7 +731,7 @@ function childEditorHTML(){
   '<p class="subblock-h">Club programs</p>'+
   '<div class="prog-compare">'+
     '<div class="prog-card cu"><span class="pc-tag">This application</span><b>Comin’ Up · Evenings</b><p>The evening teen program: activities, mentoring, and support built around what each teen needs. Free for ages 12 to 18.</p><span class="pc-when">Mon to Fri · 7:00 to 11:00 PM · Comin’ Up sites</span></div>'+
-    '<div class="prog-card day"><span class="pc-tag">Also available</span><b>After School Program · Daytime</b><p>The classic Club afternoon: homework help and academic support, arts, sports and fitness, and leadership activities.</p><span class="pc-when">Mon to Fri · 3:00 to 6:30 PM · Club branches</span></div>'+
+    '<div class="prog-card day"><span class="pc-tag">Also available</span><b>After School Program · Daytime</b><p>Daytime at a Club branch, all year: homework help and academic support, arts, sports and fitness, and leadership activities. Full days all summer.</p><span class="pc-when">School year: Mon to Fri · 3:00 to 6:30 PM</span><span class="pc-when">Summer (Jun 1 to Jul 31): Mon to Fri · 7:00 AM to 6:00 PM</span></div>'+
   '</div>'+
   '<div class="field" data-role="cdaytime"><label>Would you also like this teen to attend the daytime After School Program?</label><div class="seg"><button type="button" onclick="seg(this)">Not right now</button><button type="button" onclick="seg(this)">Yes, interested</button></div></div>'+
   '<div class="shared-note">'+I.info+' <span><b>One application covers both.</b> If you say yes, this teen is set up with both memberships when your application is approved: Comin’ Up for evenings and the After School Program for daytime. A staff member will confirm the details with you.</span></div>'+
